@@ -1,21 +1,18 @@
 
-if( !cryptopotamus) var cryptopotamus = { model:{}, view:{}, controller:{}};
+PACKAGE_CLASS( "cryptopotamus.model").define_static( function( _) {
+	
+	var PubSub = IMPORT( "utils.PubSub");
 
-(function() {
-	var m = this;
-	var v = cryptopotamus.view;
-	var c = cryptopotamus.controller;
+	_.publisher = new PubSub();
 
-	m.publisher = new utils.PubSub();
-
-	m.NEW_SALT = "newsalt";
+	_.NEW_SALT = "newsalt";
 	var _salt;
-	m.set_salt = function( salt) {
+	_.set_salt = function( salt) {
 		if( _salt == salt) return;
 		_salt = salt;
-		m.publisher.sendMessage( m.NEW_SALT);
+		_.publisher.sendMessage( _.NEW_SALT);
 	};
-	m.get_salt = function() { return _salt;};
+	_.get_salt = function() { return _salt;};
 
 	var _configs = [];
-}).call( cryptopotamus.model);
+});
