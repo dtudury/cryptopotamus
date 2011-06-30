@@ -1,7 +1,7 @@
 
-PACKAGE_CLASS( "cryptopotamus.controller").define_static( function( _) {
+PACKAGE_CLASS( "cryptopotamus.Controller").define_static( function( _) {
 	
-	var model = IMPORT( "cryptopotamus.model");
+	var model = IMPORT( "cryptopotamus.Model");
 
 	_.update_salt = function( in_event) {
 		var _event = window.event || in_event;

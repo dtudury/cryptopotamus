@@ -1,5 +1,5 @@
 
-PACKAGE_CLASS( "cryptopotamus.model").define_static( function( _) {
+PACKAGE_CLASS( "cryptopotamus.Model").define_static( function( _) {
 	
 	var PubSub = IMPORT( "utils.PubSub");
 

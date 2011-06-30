@@ -3,13 +3,16 @@
     <head>
 		<meta charset=utf-8 />
 		<title>local cryptopotamus</title>
-		<script language="javascript" src="utils.js"></script>
-		<script language="javascript" src="cryptopotamus.js"></script>
-		<script language="javascript" src="cryptopotamus.model.js"></script>
-		<script language="javascript" src="cryptopotamus.view.js"></script>
-		<script language="javascript" src="cryptopotamus.controller.js"></script>
+		<script language="javascript" src="js/CORE.js"></script>
+		<script language="javascript" src="js/utils/Closure.js"></script>
+		<script language="javascript" src="js/utils/PubSub.js"></script>
+		<script language="javascript" src="js/utils/configure.js"></script>
+		<script language="javascript" src="js/cryptopotamus/Model.js"></script>
+		<script language="javascript" src="js/cryptopotamus/View.js"></script>
+		<script language="javascript" src="js/cryptopotamus/Controller.js"></script>
+		<script language="javascript" src="js/cryptopotamus/handle_onload.js"></script>
 	</head>
-	<body onload="cryptopotamus.handle_onload()">
+	<body onload="IMPORT( 'cryptopotamus.handle_onload')()">
 		<div id="content"></div>
 	</body>
 </html>

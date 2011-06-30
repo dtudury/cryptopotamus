@@ -1,7 +1,7 @@
 
-PACKAGE_CLASS( "cryptopotamus.view").define_static( function( _) {
+PACKAGE_CLASS( "cryptopotamus.View").define_static( function( _) {
 	
-	var controller = IMPORT( "cryptopotamus.controller");
+	var controller = IMPORT( "cryptopotamus.Controller");
 	var configure = IMPORT( "utils.configure");
 
 	_.new_top_nav = function() {
