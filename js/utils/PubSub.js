@@ -3,7 +3,7 @@
  * 
  *****************************************************************************/
  
-PACKAGE_CLASS( "utils.PubSub").define_instance( function( _) {
+PACKAGE( "utils.PubSub").define_instance( function( _) {
 
 	var Closure = IMPORT( "utils.Closure");
 

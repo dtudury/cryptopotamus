@@ -3,7 +3,7 @@
  * 
  *****************************************************************************/
  
-PACKAGE_CLASS( "utils.Closure").define_static( function( _) {
+PACKAGE( "utils.Closure").define_instance( function( _) {
 	_.constructor = function( target, executable) {
 	    var args = [].slice.call( arguments, 2);
 		this.target = target;

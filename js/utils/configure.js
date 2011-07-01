@@ -5,7 +5,7 @@
  
 PACKAGE_FUNCTION( "utils.configure", function( target, source, defaults) {
 	
-	var configure = IMPORT( "utils.configure");
+	var configure = IMPORT_FUNCTION( "utils.configure");
 	
 	//helper function for configure
 	function _copy_value( target, source, attribute) {

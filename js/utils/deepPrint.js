@@ -5,7 +5,7 @@
  
 PACKAGE_FUNCTION( "utils.deepPrint", function( target, indent) {
 	
-	var deepPrint = IMPORT( "utils.deepPrint");
+	var deepPrint = IMPORT_FUNCTION( "utils.deepPrint");
 	
 	indent = indent ? indent : "";
 	var new_indent = indent;

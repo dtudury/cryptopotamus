@@ -1,5 +1,5 @@
 
-PACKAGE_CLASS( "cryptopotamus.Controller").define_static( function( _) {
+PACKAGE( "cryptopotamus.Controller").define_static( function( _) {
 	
 	var model = IMPORT( "cryptopotamus.Model");
 
