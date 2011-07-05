@@ -1,17 +1,18 @@
 
-PACKAGE( "cryptopotamus.View").define_static( function( _) {
+CLASS( "cryptopotamus.View")
+.STATIC( function() {
 	
 	var controller = IMPORT( "cryptopotamus.Controller");
-	var configure = IMPORT_FUNCTION( "utils.configure");
+	var configure = IMPORT( "utils.configure");
 
-	_.new_top_nav = function() {
-		var div = _.new_div();
-		div.appendChild( _.new_text( "salt: "));
-		div.appendChild( _.new_password_input( controller.update_salt));
-		div.appendChild( _.new_button_input( controller.generate_all, "generate all"));
+	this.new_top_nav = function() {
+		var div = this.new_div();
+		div.appendChild( this.new_text( "salt: "));
+		div.appendChild( this.new_password_input( controller.update_salt));
+		div.appendChild( this.new_button_input( controller.generate_all, "generate all"));
 		return div;
 	};
-	_.new_text_input = function( value, size) {
+	this.new_text_input = function( value, size) {
 		var input = document.createElement( "input");
 		var _defaults = { value: "text here", size: 20};
 		var _no_prompt = { onfocus: null, onblur: null};
@@ -27,7 +28,7 @@ PACKAGE( "cryptopotamus.View").define_static( function( _) {
 		configure( configuration, _prompt);
 		return configure( input, configuration, _defaults);
 	};
-	_.new_button_input = function( onclick, value) {
+	this.new_button_input = function( onclick, value) {
 		var input = document.createElement( "input");
 		var configuration = { type: "button", value: value, onclick: onclick};
 		return configure( input, configuration);
@@ -59,13 +60,13 @@ PACKAGE( "cryptopotamus.View").define_static( function( _) {
 		};
 		return configure( input, configuration);
 	};
-	_.new_password_input = function( onchange, size) {
+	this.new_password_input = function( onchange, size) {
 		return _new_password_input_prompt();
 	};
-	_.new_div = function() {
+	this.new_div = function() {
 		return document.createElement( "div");
 	};
-	_.new_text = function( text) {
+	this.new_text = function( text) {
 		return document.createTextNode( text);
 	};
 });

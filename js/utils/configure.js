@@ -3,9 +3,10 @@
  * 
  *****************************************************************************/
  
-PACKAGE_FUNCTION( "utils.configure", function( target, source, defaults) {
+FUNCTION( "utils.configure")
+.DEFINITION( function( target, source, defaults) {
 	
-	var configure = IMPORT_FUNCTION( "utils.configure");
+	var configure = IMPORT( "utils.configure");
 	
 	//helper function for configure
 	function _copy_value( target, source, attribute) {

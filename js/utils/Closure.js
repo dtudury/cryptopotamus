@@ -3,9 +3,10 @@
  * 
  *****************************************************************************/
  
-PACKAGE( "utils.Closure").define_instance( function( _) {
-	_.constructor = function( target, executable) {
-	    var args = [].slice.call( arguments, 2);
+CLASS( "utils.Closure")
+.DEFINITION( function() {
+	this.constructor = function( target, executable) {
+		var args = [].slice.call( arguments, 2);
 		this.target = target;
 		this.executable = executable;
 		this.args = args;
@@ -21,6 +22,15 @@ PACKAGE( "utils.Closure").define_instance( function( _) {
 				if( this.args[ i] != in_closure.args[ i]) return false;
 			}
 			return true;
+		};
+	};
+})
+.STATIC( function() {
+	this.wrap = function( target, executable) {
+		var args = [].slice.call( arguments, 2);
+		return function() {
+			var _args = [].slice.call( arguments);
+			executable.apply( target, args.concat( _args));
 		};
 	};
 });

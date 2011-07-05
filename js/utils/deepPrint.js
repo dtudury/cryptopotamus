@@ -3,7 +3,8 @@
  * 
  *****************************************************************************/
  
-PACKAGE_FUNCTION( "utils.deepPrint", function( target, indent) {
+FUNCTION( "utils.deepPrint")
+.DEFINITION( function( target, indent) {
 	
 	var deepPrint = IMPORT_FUNCTION( "utils.deepPrint");
 	

@@ -1,18 +1,19 @@
 
-PACKAGE( "cryptopotamus.Model").define_static( function( _) {
+CLASS( "cryptopotamus.Model")
+.STATIC( function() {
 	
 	var PubSub = IMPORT( "utils.PubSub");
 
-	_.publisher = new PubSub();
+	this.publisher = new PubSub();
 
-	_.NEW_SALT = "newsalt";
+	this.NEW_SALT = "newsalt";
 	var _salt;
-	_.set_salt = function( salt) {
+	this.set_salt = function( salt) {
 		if( _salt == salt) return;
 		_salt = salt;
-		_.publisher.sendMessage( _.NEW_SALT);
+		this.publisher.sendMessage( this.NEW_SALT);
 	};
-	_.get_salt = function() { return _salt;};
+	this.get_salt = function() { return _salt;};
 
 	var _configs = [];
 });

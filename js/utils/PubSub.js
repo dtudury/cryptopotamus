@@ -3,18 +3,19 @@
  * 
  *****************************************************************************/
  
-PACKAGE( "utils.PubSub").define_instance( function( _) {
+CLASS( "utils.PubSub")
+.DEFINITION( function() {
 
 	var Closure = IMPORT( "utils.Closure");
 
 	var _topics = {};
 	
-	_.subscribe = function( target, executable, topic) {
+	this.subscribe = function( target, executable, topic) {
 		if( !_topics[ topic]) _topics[ topic] = [];
 		_topics[ topic].push( new Closure( target, executable));
 	};
 	
-	_.unsubscribe = function( target, executable, topic) {
+	this.unsubscribe = function( target, executable, topic) {
 		if( !_topics[ topic]) _topics[ topic] = [];
 		var subscriptions = _topics[ topic];
 		_topics[ topic] = [];
@@ -26,7 +27,7 @@ PACKAGE( "utils.PubSub").define_instance( function( _) {
 		}
 	};
 	
-	_.sendMessage = function( topic) {
+	this.sendMessage = function( topic) {
 		if( !_topics[ topic]) _topics[ topic] = [];
 		var _args = [].slice.call( arguments, 1);
 		for( var i = 0; i < _topics[ topic].length; i++) {

@@ -1,6 +1,8 @@
-PACKAGE( "cryptopotamus.view.FancierDiv", IMPORT( "cryptopotamus.view.FancyDiv")).define_instance( function( _) {
+CLASS( "cryptopotamus.view.FancierDiv")
+.EXTENDS( "cryptopotamus.view.FancyDiv")
+.DEFINITION( function() {
 
-	_.get_configuration = function() {
+	this.get_configuration = function() {
 		return this.extend_configuration( { c: "14", d: "15"});
 	};
 });
