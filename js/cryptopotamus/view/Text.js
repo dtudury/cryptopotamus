@@ -3,16 +3,9 @@ CLASS( "cryptopotamus.view.Text")
 .DEFINITION( function() {
 	
 	var SUPER = this.SUPER;
-	var text = "";
 	
 	this.constructor = function( in_parent, in_text) {
-		text = in_text;
-		SUPER.constructor.call( this, in_parent);
+		SUPER.constructor.call( this, in_parent, "span");
+		this.get_node().innerHTML = in_text;
 	};
-	
-	//override
-	this.create_node = function() {
-		this.node = document.createTextNode( text);
-	};
-
 });

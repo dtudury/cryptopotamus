@@ -11,24 +11,25 @@ CLASS( "cryptopotamus.view.TextInputPrompted")
 	var _focused_mode = { value: "", style: {color:"black"}};
 		
 	function onfocus() {
-		configure( this.get_node(), _focused_mode);
+		this.configure( _focused_mode);
 	}
 	function onblur() { 
 		if( this.get_node().value === "") configure( this.get_node(), _blurred_mode);
-		else configure( this.get_node(), _disabled_mode);
+		else this.configure( _disabled_mode);
 	}
+	this.onchange = function() {
+		this.sendMessage( "change");
+	};
 
 
 	this.constructor = function( in_parent, in_prompt_text) {
 		_blurred_mode.value = in_prompt_text;
-		var local_configuration = this.get_configuration();
-		SUPER.constructor.call( this, in_parent);
+		SUPER.constructor.call( this, in_parent, "input", this.get_configuration());
 	};
-	
-	//override
-	this.create_node = function() {
-		this.node = document.createElement( "input");
-	};
+
+	this.get_value = function() {
+		return this.get_node().value;
+	}
 	
 	//override
 	this.get_configuration = function() {
@@ -36,11 +37,11 @@ CLASS( "cryptopotamus.view.TextInputPrompted")
 			size: 20, 
 			type: "text", 
 			onfocus: wrap( this, onfocus), 
-			onblur: wrap( this, onblur)
+			onblur: wrap( this, onblur),
+			onchange: wrap( this, this.onchange),
+			onkeyup: wrap( this, this.onchange)
 		};
-		configure( default_config, _blurred_mode);
-		return this.extend_configuration( default_config);
+		return configure( default_config, _blurred_mode);
 	};
-
 
 });

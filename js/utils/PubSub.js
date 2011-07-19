@@ -8,30 +8,32 @@ CLASS( "utils.PubSub")
 
 	var Closure = IMPORT( "utils.Closure");
 
-	var _topics = {};
+	this.get_topic = function( in_topic) {
+		if( !this._topics) this._topics = {};
+		if( !this._topics[ in_topic]) this._topics[ in_topic] = [];
+		return this._topics[ in_topic];
+	}
 	
 	this.subscribe = function( target, executable, topic) {
-		if( !_topics[ topic]) _topics[ topic] = [];
-		_topics[ topic].push( new Closure( target, executable));
+		this.get_topic( topic).push( new Closure( target, executable));
 	};
 	
 	this.unsubscribe = function( target, executable, topic) {
-		if( !_topics[ topic]) _topics[ topic] = [];
-		var subscriptions = _topics[ topic];
-		_topics[ topic] = [];
+		var subscriptions = this.get_topic( topic);
+		this._topics[ topic] = [];
 		var closure = new Closure( target, executable);
 		for( var i = 0; i < subscriptions.length; i++) {
 			if( !closure.compare( subscriptions[ i])) {
-				_topics[ topic].push( subscriptions[ i]);
+				this.get_topic( topic).push( subscriptions[ i]);
 			}
 		}
 	};
 	
 	this.sendMessage = function( topic) {
-		if( !_topics[ topic]) _topics[ topic] = [];
 		var _args = [].slice.call( arguments, 1);
-		for( var i = 0; i < _topics[ topic].length; i++) {
-			_topics[ topic][ i].execute.apply( null, _args);
+		var topics = this.get_topic( topic).slice( 0);
+		for( var i = 0; i < topics.length; i++) {
+			topics[ i].execute.apply( null, _args);
 		}
 	};
 });
