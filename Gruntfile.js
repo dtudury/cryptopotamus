@@ -6,15 +6,17 @@
  * To change this template use File | Settings | File Templates.
  */
 
+var fs = require("fs");
 var path = require("path");
 
 module.exports = function(grunt) {
-	console.log("exporting...");
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
-		clean: ["build"],
+		clean: {
+			build: ["build"]
+		},
 		copy: {
-			main: {
+			web: {
 				files: [
 					{ expand: true, src: ["web/index.html", "web/favicon.ico"], dest: "build/", rename: function(dest, src) {
 						return dest + path.basename(src);
@@ -23,7 +25,7 @@ module.exports = function(grunt) {
 			}
 		},
 		requirejs: {
-			compile: {
+			main: {
 				options: {
 					name: "main",
 					baseUrl: "web/js",
@@ -33,8 +35,8 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		open : {
-			dev : {
+		open: {
+			local: {
 				path: "http://localhost:8000/"
 			}
 		},
@@ -52,9 +54,21 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-connect");
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-requirejs");
+	grunt.loadNpmTasks("grunt-bump");
 	grunt.loadNpmTasks("grunt-open");
-	grunt.registerTask("log", "Log some stuff.", function() {
-		grunt.log.write("Logging some stuff... " + grunt.config("pkg").name + " " + grunt.template.today("isoUtcDateTime"));
+	grunt.registerTask("template-index", "apply simple templating to index file", function() {
+		var index = fs.readFileSync("build/index.html");
+		index = index.toString();
+		var data = grunt.config("pkg");
+		data.date = grunt.template.today("isoUtcDateTime");
+		index = grunt.template.process(index, {data: data});
+		fs.writeFileSync("build/index.html", index);
 	});
-	grunt.registerTask("default", ["clean", "copy", "requirejs", "log", "open", "connect"]);
+	grunt.registerTask("log", "Log some stuff.", function() {
+		grunt.log.writeln(grunt.config("pkg").name);
+		grunt.log.writeln(grunt.template.today("isoUtcDateTime"));
+		grunt.log.writeln(grunt.config("pkg").version);
+	});
+	grunt.registerTask("build", ["bump:build", "clean:build", "copy:web", "template-index", "requirejs:main"]);
+	grunt.registerTask("default", ["build", "log", "open:local", "connect:server"]);
 }
