@@ -8,14 +8,21 @@
 
 define(
 	[
-		"Backbone"
-	], function(Backbone) {
+		"Backbone",
+		"dtudury/cryptopotamus/view/UserField",
+		"dtudury/cryptopotamus/view/SiteField",
+		"dtudury/cryptopotamus/view/RemoveItemButton"
+	], function(Backbone, UserField, SiteField, RemoveItemButton) {
 		return Backbone.View.extend({
 			tagName: "li",
-			render: function() {
-				this.el.appendChild(document.createTextNode(this.model.get("user")));
+			initialize: function() {
+				var userField = new UserField({model:this.model})
+				this.el.appendChild(userField.render().el);
 				this.el.appendChild(document.createTextNode("@"));
-				this.el.appendChild(document.createTextNode(this.model.get("site")));
+				var siteField = new SiteField({model:this.model})
+				this.el.appendChild(siteField.render().el);
+				var removeItemButton = new RemoveItemButton({model:this.model})
+				this.el.appendChild(removeItemButton.render().el);
 				return this;
 			}
 		});

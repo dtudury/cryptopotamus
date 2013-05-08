@@ -16,15 +16,14 @@ define(
 			events: {
 				"change": "loadConfigurations"
 			},
-			render: function() {
+			initialize: function() {
 				this.el.setAttribute("type", "file");
-				return this;
 			},
-			loadConfigurations: function(changeEvent) {
+			loadConfigurations: function() {
 				if(this.el.readyState = FileReader.DONE) {
 					var file = this.el.files[0];
 					var fileReader = new FileReader();
-					fileReader.onload = function(onloadEvent) {
+					fileReader.onload = function() {
 						var data = fileReader.result;
 						Configurations.reset(JSON.parse(data));
 					};

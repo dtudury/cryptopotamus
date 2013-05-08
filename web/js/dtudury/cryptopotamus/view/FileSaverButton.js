@@ -17,12 +17,10 @@ define(
 			events: {
 				"click": "saveConfigurations"
 			},
-			render: function() {
+			initialize: function() {
 				this.el.appendChild(document.createTextNode("Save"));
-				return this;
 			},
-			saveConfigurations: function(clickEvent) {
-				console.log("saving");
+			saveConfigurations: function() {
 				var blob = new Blob([JSON.stringify(Configurations)], {type: "text/plain;charset=utf-8"})
 				saveAs(blob, "cryptopotamus.txt");
 			}

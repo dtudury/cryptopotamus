@@ -1,6 +1,6 @@
 {
   "name": "cryptopotamus",
-  "version": "0.0.1-prealpha+build.72",
+  "version": "0.0.1-prealpha+build.91",
   "description": "secure serverless password management",
   "homepage": "http://cryptopotamus.jit.su/",
   "main": "server.js",

@@ -11,7 +11,8 @@ define(
 		"Backbone",
 		"dtudury/cryptopotamus/Configurations",
 		"dtudury/cryptopotamus/view/ConfigurationListItem",
-	], function(Backbone, Configurations, ConfigurationListItem) {
+		"dtudury/cryptopotamus/view/AddItemButton"
+	], function(Backbone, Configurations, ConfigurationListItem, AddItemButton) {
 		return Backbone.View.extend({
 			tagName: "ul",
 			initialize: function() {
@@ -27,6 +28,8 @@ define(
 					var fileSaverButton = new ConfigurationListItem({model:configuration});
 					this.el.appendChild(fileSaverButton.render().el);
 				}, this);
+				var addItemButton = new AddItemButton();
+				this.el.appendChild(addItemButton.render().el);
 				return this;
 			}
 		});
