@@ -42,36 +42,39 @@ function startup() {
 }
 
 function addResponseWritersForFilesIn(localPath, serverPath) {
-	var stat = fs.statSync(localPath);
-	if(stat.isDirectory()) {
-		fs.readdir(localPath, function(err, fileNames) {
-			if(err) throw err;
-			for(var i = 0; i < fileNames.length; i++) {
-				var fileName = fileNames[i];
-				addResponseWritersForFilesIn(path.join(localPath, fileName), path.join(serverPath, fileName));
-			}
-		});
-	} else if(stat.isFile()) {
-		fs.readFile(localPath, null, function(err, data) {
-			if(err) throw err;
-			var extension = path.extname(localPath);
-			switch(extension) {
-				case ".js":
-					console.log("js", localPath);
-					responseWriters[serverPath] = getCacheResponseWriter("application/x-javascript", data);
-					break;
-				case ".html":
-				case ".htm":
-					console.log("html", localPath);
-					responseWriters[serverPath] = getCacheResponseWriter("text/html", data);
-					break;
-				case ".ico":
-					console.log("ico", localPath);
-					responseWriters[serverPath] = getCacheResponseWriter("image/x-icon", data);
-					break;
-			}
-		});
-	}
+	fs.stat(localPath, function(err, stat) {
+		if(err) throw err;
+		if(stat.isDirectory()) {
+			fs.readdir(localPath, function(err, fileNames) {
+				if(err) throw err;
+				for(var i = 0; i < fileNames.length; i++) {
+					var fileName = fileNames[i];
+					addResponseWritersForFilesIn(path.join(localPath, fileName), path.join(serverPath, fileName));
+				}
+			});
+		} else if(stat.isFile()) {
+			fs.readFile(localPath, null, function(err, data) {
+				if(err) throw err;
+				var extension = path.extname(localPath);
+				switch(extension) {
+					case ".js":
+						console.log("js", localPath);
+						responseWriters[serverPath] = getCacheResponseWriter("application/x-javascript", data);
+						break;
+					case ".html":
+					case ".htm":
+						console.log("html", localPath);
+						responseWriters[serverPath] = getCacheResponseWriter("text/html", data);
+						break;
+					case ".ico":
+						console.log("ico", localPath);
+						responseWriters[serverPath] = getCacheResponseWriter("image/x-icon", data);
+						break;
+				}
+			});
+		}
+	});
+
 }
 
 function getCacheResponseWriter(contentType, data) {
