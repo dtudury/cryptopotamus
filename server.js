@@ -6,29 +6,29 @@
  * To change this template use File | Settings | File Templates.
  */
 
-var fs = require("fs");
 var http = require("http");
 var path = require("path");
 var url = require("url");
+var dirWalker = require("./lib/dirWalker");
 
-var asyncsOpen = 0;
+
 var responseWriters = {};
-addResponseWritersForFilesIn("build", "/", responseWriters, startup);
-//startup();
+dirWalker.forAllFiles("build", processFile, startup);
+
 
 function startup() {
 	responseWriters["/"] = responseWriters["/index.html"];
-	http.createServer(function (request, response) {
+	http.createServer(function(request, response) {
 		var data = "";
-		request.on("data", function (dataChunk) {
+		request.on("data", function(dataChunk) {
 			data += dataChunk;
-			if (data.length > 1e4) {
+			if(data.length > 1e4) {
 				data = "";
 				response.writeHead(413, {"Content-Type": "text/plain"});
 				request.connection.destroy();
 			}
 		});
-		request.on("end", function () {
+		request.on("end", function() {
 			var parsedUrl = url.parse(request.url);
 			console.log(parsedUrl.pathname);
 			var responseWriter = responseWriters[parsedUrl.pathname];
@@ -42,63 +42,33 @@ function startup() {
 	}).listen(8000);
 }
 
-function addResponseWritersForFilesIn(localPath, serverPath, responseWriters, callback) {
-	incrementAsyncs();
-	fs.stat(localPath, function(err, stat) {
-		if(err) throw err;
-		if(stat.isDirectory()) {
-			incrementAsyncs();
-			fs.readdir(localPath, function(err, fileNames) {
-				if(err) throw err;
-				for(var i = 0; i < fileNames.length; i++) {
-					var fileName = fileNames[i];
-					addResponseWritersForFilesIn(path.join(localPath, fileName), path.join(serverPath, fileName), responseWriters, callback);
-				}
-				decrementAsyncs(callback);
-			});
-		} else if(stat.isFile()) {
-			incrementAsyncs();
-			fs.readFile(localPath, null, function(err, data) {
-				if(err) throw err;
-				var extension = path.extname(localPath);
-				switch(extension) {
-					case ".js":
-						console.log("js", localPath);
-						responseWriters[serverPath] = getCacheResponseWriter("application/x-javascript", data);
-						break;
-					case ".html":
-					case ".htm":
-						console.log("html", localPath);
-						responseWriters[serverPath] = getCacheResponseWriter("text/html", data);
-						break;
-					case ".ico":
-						console.log("ico", localPath);
-						responseWriters[serverPath] = getCacheResponseWriter("image/x-icon", data);
-						break;
-				}
-				decrementAsyncs(callback);
-			});
-		}
-		decrementAsyncs(callback);
-	});
-}
+function processFile(relativePath, data) {
+	var extension = path.extname(relativePath);
+	var fullPath = path.join("/", relativePath);
+	switch(extension) {
+		case ".js":
+			console.log("js", fullPath);
+			responseWriters[fullPath] = getCacheResponseWriter("application/x-javascript", data);
+			break;
+		case ".html":
+		case ".htm":
+			console.log("html", fullPath);
+			responseWriters[fullPath] = getCacheResponseWriter("text/html", data);
+			break;
+		case ".ico":
+			console.log("ico", fullPath);
+			responseWriters[fullPath] = getCacheResponseWriter("image/x-icon", data);
+			break;
+	}
 
-function incrementAsyncs() {
-	asyncsOpen++;
-	console.log(asyncsOpen);
-}
-function decrementAsyncs(callback) {
-	asyncsOpen--;
-	console.log(asyncsOpen);
-	if(asyncsOpen == 0) {
-		callback();
+	function getCacheResponseWriter(contentType, data) {
+		return function(response) {
+			response.writeHead(200, {"Content-Type": contentType});
+			response.end(data);
+		};
 	}
 }
 
-function getCacheResponseWriter(contentType, data) {
-	return function(response) {
-		response.writeHead(200, {"Content-Type": contentType});
-		response.end(data);
-	};
-}
+
+
 
