@@ -11,12 +11,13 @@ var http = require("http");
 var path = require("path");
 var url = require("url");
 
+var asyncsOpen = 0;
 var responseWriters = {};
-addResponseWritersForFilesIn("build", "/", responseWriters);
-responseWriters["/"] = responseWriters["/index.html"];
-startup();
+addResponseWritersForFilesIn("build", "/", responseWriters, startup);
+//startup();
 
 function startup() {
+	responseWriters["/"] = responseWriters["/index.html"];
 	http.createServer(function (request, response) {
 		var data = "";
 		request.on("data", function (dataChunk) {
@@ -41,18 +42,22 @@ function startup() {
 	}).listen(8000);
 }
 
-function addResponseWritersForFilesIn(localPath, serverPath) {
+function addResponseWritersForFilesIn(localPath, serverPath, responseWriters, callback) {
+	incrementAsyncs();
 	fs.stat(localPath, function(err, stat) {
 		if(err) throw err;
 		if(stat.isDirectory()) {
+			incrementAsyncs();
 			fs.readdir(localPath, function(err, fileNames) {
 				if(err) throw err;
 				for(var i = 0; i < fileNames.length; i++) {
 					var fileName = fileNames[i];
-					addResponseWritersForFilesIn(path.join(localPath, fileName), path.join(serverPath, fileName));
+					addResponseWritersForFilesIn(path.join(localPath, fileName), path.join(serverPath, fileName), responseWriters, callback);
 				}
+				decrementAsyncs(callback);
 			});
 		} else if(stat.isFile()) {
+			incrementAsyncs();
 			fs.readFile(localPath, null, function(err, data) {
 				if(err) throw err;
 				var extension = path.extname(localPath);
@@ -71,10 +76,23 @@ function addResponseWritersForFilesIn(localPath, serverPath) {
 						responseWriters[serverPath] = getCacheResponseWriter("image/x-icon", data);
 						break;
 				}
+				decrementAsyncs(callback);
 			});
 		}
+		decrementAsyncs(callback);
 	});
+}
 
+function incrementAsyncs() {
+	asyncsOpen++;
+	console.log(asyncsOpen);
+}
+function decrementAsyncs(callback) {
+	asyncsOpen--;
+	console.log(asyncsOpen);
+	if(asyncsOpen == 0) {
+		callback();
+	}
 }
 
 function getCacheResponseWriter(contentType, data) {
