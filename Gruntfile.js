@@ -69,6 +69,6 @@ module.exports = function(grunt) {
 		grunt.log.writeln(grunt.template.today("isoUtcDateTime"));
 		grunt.log.writeln(grunt.config("pkg").version);
 	});
-	grunt.registerTask("build", ["bump:build", "clean:build", "copy:web", "template-index", "requirejs:main"]);
+	grunt.registerTask("build", ["bump:pre", "clean:build", "copy:web", "template-index", "requirejs:main"]);
 	grunt.registerTask("default", ["build", "log", "open:local", "connect:server"]);
 }

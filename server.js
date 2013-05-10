@@ -17,6 +17,7 @@ dirWalker.forAllFiles("build", processFile, startup);
 
 
 function startup() {
+	console.log("startup")
 	responseWriters["/"] = responseWriters["/index.html"];
 	http.createServer(function(request, response) {
 		var data = "";
