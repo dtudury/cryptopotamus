@@ -1,0 +1,14 @@
+[
+    {
+        "website":"mail.google.com", 
+        "username":"david.tudury",
+        "version":"1",
+        "iterations":10000,
+        "generator":{
+            "sequence": [
+                {"regex":"\\d{3}"},
+                {"regex":"_[a-z][A-Z][0-9][a-zA-Z0-9_]{7}", "shuffle": true}
+            ]
+        }
+    }
+]
